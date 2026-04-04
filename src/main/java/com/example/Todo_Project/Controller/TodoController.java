@@ -11,24 +11,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/todo")
-@CrossOrigin(origins = "https://sakthivel1107.github.io/todoui")
+@CrossOrigin("*")
 public class TodoController {
     @Autowired
     private TodoService todoService;
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Todo>> getAllTodos(@PathVariable Long userId) {
-        return new ResponseEntity<>(todoService.getTodos(userId), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Todo>> getAllTodos() throws Exception{
+        return new ResponseEntity<>(todoService.getTodos(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Todo> insertTodo(@RequestBody Todo todo){
+    public ResponseEntity<Todo> insertTodo(@RequestBody Todo todo) throws Exception{
         return new ResponseEntity<>(todoService.insertTodo(todo),HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public void deleteTodoById(@PathVariable Long id){
-        todoService.deleteTodo(id);
+    public void deleteTodoById(@PathVariable String id) throws Exception{
+        todoService.deleteTodoById(id);
     }
     @PutMapping
-    public ResponseEntity<Todo> updateTodoById(@RequestBody Todo todo) {
-        return new ResponseEntity<>(todoService.updateTodo(todo),HttpStatus.OK);
+    public ResponseEntity<?> updateTodoById(@RequestBody Todo todo) throws Exception{
+        try{
+            return new ResponseEntity<>(todoService.updateTodo(todo),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
+        }
+
     }
 }

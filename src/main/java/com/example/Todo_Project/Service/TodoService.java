@@ -11,16 +11,40 @@ import java.util.List;
 public class TodoService {
     @Autowired
     private TodoRepository todoRepository;
-    public List<Todo> getTodos(Long userId){
-        return todoRepository.findAllTodoByUserId(userId);
+    @Autowired
+    private UserService userService;
+    public List<Todo> getTodos() throws Exception{
+        try {
+            return todoRepository.findAllTodoByUserId(userService.loggedInUserId());
+        }
+        catch (Exception e){
+            throw new Exception("userId is invalid");
+        }
     }
-    public Todo insertTodo(Todo todo){
-        return todoRepository.save(todo);
+    public Todo insertTodo(Todo todo) throws Exception{
+        try{
+            todo.setUserId(userService.loggedInUserId());
+            return todoRepository.save(todo);
+        }
+        catch (Exception e){
+            throw new Exception("userId is invalid");
+        }
     }
-    public void deleteTodo(Long id){
-        todoRepository.deleteById(id);
+    public void deleteTodoById(String id) throws Exception{
+        try{
+            todoRepository.deleteById(id);
+        }
+
+        catch (Exception e){
+            throw new Exception("userId is invalid");
+        }
     }
-    public Todo updateTodo(Todo todo){
-        return todoRepository.save(todo);
+    public Todo updateTodo(Todo todo) throws Exception{
+        try{
+            todo.setUserId(userService.loggedInUserId());
+            return todoRepository.save(todo);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

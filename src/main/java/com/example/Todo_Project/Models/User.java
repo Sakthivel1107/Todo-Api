@@ -1,25 +1,21 @@
 package com.example.Todo_Project.Models;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "UserTable")
+@Document(collection = "Users")
 public class User {
     @Id
-    @GeneratedValue
-    long id;
-    @NotBlank
+    String id;
     String name;
     @Email
     @NotBlank
