@@ -67,6 +67,7 @@ public class AuthController {
         String name = body.get("name");
         User user = userService.findUserById(userService.loggedInUserId());
         user.setName(name);
+        userService.updateUser(user);
         return ResponseEntity.ok("Name updated successfully");
     }
 }
